@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset='utf-8'>
+    <meta http-equiv='X-UA-Compatible' content='IE=edge'>
+    <title>今日の占い - ことだま屋</title>
+    <meta name='viewport' content='width=device-width, initial-scale=1'>
+    <link rel='stylesheet' type='text/css' media='screen' href='static/main.css'>
+    <link rel='stylesheet' type='text/css' media='screen' href='static/button.css'>
+</head>
+<body>
+
+    <div>
+        <div id="button_div">
+            <a href="javascript:begin()">
+                <img class="uranai_button_0" src="static/images/button_down.png">
+                <img class="uranai_button_1" src="static/images/button.png">
+            </a>
+        </div>
+        <div id="loading_div">
+            <img src="static/images/loading.png" class="purun">
+            <div id="progressbar">
+                <span id="loading"></span>
+            </div>
+        </div>
+        <img src="" id="image" class="center">
+        <div id="post_buton_div">
+            <a id="post_button" class="twitter-share-button" data-size="large" href="">Tweet</a>
+        </div>
+    </div>
+
+<script>
+    // files = [
+    // ]
+
+    // // 表示画像をランダムに選択
+    // const file_id = files[Math.floor(Math.random()*files.length)];
+
+    // // 表示画像を設定する
+    // const target = document.querySelector('#image');
+    // const url = 'static/images/kotoutaya/' + file_id + '.jpg';
+    // target.src = url;
+
+    // // postボタンの設定
+    // const elements = [
+    //     ['url', 'https://siteinfo.azurewebsites.net/kotouta/' + file_id],
+    //     ['text', '今日のひとこと'],
+    //     ['hashtags', '今日のひとこと,ことうた屋だいぞう'],
+    //     ['via', 'daizo77'],
+    // ];
+    // const post_button_value = 'https://twitter.com/intent/tweet?' + (Array.from(elements, (element) => element.join('='))).join('&');
+    // const post_button = document.getElementById('post_button');
+    // post_button.attributes['href'].value = post_button_value;
+
+    // ローディング表示を非表示にする
+    document.getElementById('loading_div').style.display = 'none';
+
+    // poatボタンを非表示にする
+    document.getElementById('post_buton_div').style.display = 'none';
+
+    // 読み込み中画像を表示させる
+    function begin() {
+        document.getElementById('button_div').style.display = 'none';
+        document.getElementById('loading_div').style.display = 'block';
+        setTimeout(showImage, 5000);
+    }
+
+    // 今日のひとこと画像を表示させる
+    function showImage() {
+
+        document.getElementById('loading_div').style.display = 'none';
+
+        // postボタンの表示とスクリプトの動的追加
+        //document.getElementById('post_buton_div').style.display = 'block';
+        var script = document.createElement( 'script');
+        script.type = 'text/javascript';
+        script.src = 'https://platform.twitter.com/widgets.js';
+        var firstScript = document.getElementsByTagName( 'script' )[ 0 ];
+        firstScript.parentNode.insertBefore( script, firstScript );
+
+        document.getElementById('image').style.display = 'block';
+        document.getElementById('image').classList.add("active");
+    }
+</script>
+</body>
+</html>
+
