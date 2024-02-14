@@ -73,7 +73,6 @@
         let url = "https://fortunereading.azurewebsites.net/result";
         fetch(url, {"content" : "HOGE"})
             .then(function(response) {
-                alert(response);
                 if (!response.ok) {
                     showImage("AIが寝ぼけているようです...");
                 }
