@@ -7,9 +7,11 @@
     <meta name='viewport' content='width=device-width, initial-scale=1'>
     <link rel='stylesheet' type='text/css' media='screen' href='static/main.css'>
     <link rel='stylesheet' type='text/css' media='screen' href='static/button.css'>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Kaisei+Decol&family=New+Tegomin&display=swap" rel="stylesheet">
 </head>
 <body>
-
     <div>
         <div id="button_div">
             <a href="javascript:begin()">
@@ -19,68 +21,84 @@
         </div>
         <div id="loading_div">
             <img src="static/images/loading.png" class="purun">
-            <div id="progressbar">
-                <span id="loading"></span>
+            <div class="loader_div">
+            <div class="loader">
+                <span style="--i:1;"></span>
+                <span style="--i:2;"></span>
+                <span style="--i:3;"></span>
+                <span style="--i:4;"></span>
+                <span style="--i:5;"></span>
+                <span style="--i:6;"></span>
+                <span style="--i:7;"></span>
+                <span style="--i:8;"></span>
+                <span style="--i:9;"></span>
+                <span style="--i:10;"></span>
+                <span style="--i:11;"></span>
+                <span style="--i:12;"></span>
+                <span style="--i:13;"></span>
+                <span style="--i:14;"></span>
+                <span style="--i:15;"></span>
+                <span style="--i:16;"></span>
+                <span style="--i:17;"></span>
+                <span style="--i:18;"></span>
+                <span style="--i:19;"></span>
+                <span style="--i:20;"></span>
+            </div>
             </div>
         </div>
-        <img src="" id="image" class="center">
-        <div id="post_buton_div">
-            <a id="post_button" class="twitter-share-button" data-size="large" href="">Tweet</a>
+        <div id="div_bottom">
+            <pre class="new-tegomin-regular">占っています
+しばらくお待ちください。</pre>
+        </div>
+        <div id="div_center" class="new-tegomin-regular">
         </div>
     </div>
 
 <script>
-    // files = [
-    // ]
-
-    // // 表示画像をランダムに選択
-    // const file_id = files[Math.floor(Math.random()*files.length)];
-
-    // // 表示画像を設定する
-    // const target = document.querySelector('#image');
-    // const url = 'static/images/kotoutaya/' + file_id + '.jpg';
-    // target.src = url;
-
-    // // postボタンの設定
-    // const elements = [
-    //     ['url', 'https://siteinfo.azurewebsites.net/kotouta/' + file_id],
-    //     ['text', '今日のひとこと'],
-    //     ['hashtags', '今日のひとこと,ことうた屋だいぞう'],
-    //     ['via', 'daizo77'],
-    // ];
-    // const post_button_value = 'https://twitter.com/intent/tweet?' + (Array.from(elements, (element) => element.join('='))).join('&');
-    // const post_button = document.getElementById('post_button');
-    // post_button.attributes['href'].value = post_button_value;
-
     // ローディング表示を非表示にする
     document.getElementById('loading_div').style.display = 'none';
 
-    // poatボタンを非表示にする
-    document.getElementById('post_buton_div').style.display = 'none';
+    // 占っています表示
+    document.getElementById('div_bottom').style.display = 'none';
+
+    // 占い結果表示
+    document.getElementById('div_center').style.display = 'none';
 
     // 読み込み中画像を表示させる
     function begin() {
         document.getElementById('button_div').style.display = 'none';
         document.getElementById('loading_div').style.display = 'block';
-        setTimeout(showImage, 5000);
+        document.getElementById('div_bottom').style.display = 'block';
+        
+        let url = "https://fortunereading.azurewebsites.net/result";
+        fetch(url, {"content" : "HOGE"})
+            .then(function(response) {
+                alert(response);
+                if (!response.ok) {
+                    showImage("AIが寝ぼけているようです...");
+                }
+                return response.json();
+            })
+            .then(function(promise) {
+                showImage(promise.content);
+            })
+            .catch(function(err) {
+                showImage("AIが応答しません...");
+            });
     }
 
     // 今日のひとこと画像を表示させる
-    function showImage() {
+    function showImage(content) {
 
         document.getElementById('loading_div').style.display = 'none';
+        document.getElementById('div_bottom').style.display = 'none';
 
-        // postボタンの表示とスクリプトの動的追加
-        //document.getElementById('post_buton_div').style.display = 'block';
-        var script = document.createElement( 'script');
-        script.type = 'text/javascript';
-        script.src = 'https://platform.twitter.com/widgets.js';
-        var firstScript = document.getElementsByTagName( 'script' )[ 0 ];
-        firstScript.parentNode.insertBefore( script, firstScript );
-
-        document.getElementById('image').style.display = 'block';
-        document.getElementById('image').classList.add("active");
+        div_center = document.getElementById('div_center');
+        div_center.style.display = 'block';
+        div_center.innerHTML = content;
+        div_center.classList.add("active");
     }
+
 </script>
 </body>
 </html>
