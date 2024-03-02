@@ -51,6 +51,21 @@
 しばらくお待ちください。</pre>
         </div>
         <div id="div_center" class="new-tegomin-regular">
+            <p id ="result0" class="new-tegomin-small">恋愛運：
+                読み込み中
+            </p>
+            <p id ="result1" class="new-tegomin-small">仕事運：
+                読み込み中
+            </p>
+            <p id ="result2" class="new-tegomin-small">金運：
+                読み込み中
+            </p>
+            <p id ="result3" class="new-tegomin-small">健康運：
+                読み込み中
+            </p>
+            <p id ="result4" class="new-tegomin-small">勉強運：
+                読み込み中
+            </p>
         </div>
     </div>
 
@@ -69,33 +84,86 @@
         document.getElementById('button_div').style.display = 'none';
         document.getElementById('loading_div').style.display = 'block';
         document.getElementById('div_bottom').style.display = 'block';
-        
-        let url = "https://fortunereading.azurewebsites.net/result";
-        fetch(url, {"content" : "HOGE"})
-            .then(function(response) {
-                if (!response.ok) {
-                    showImage("AIが寝ぼけているようです...");
-                }
-                return response.json();
-            })
-            .then(function(promise) {
-                showImage(promise.content);
-            })
-            .catch(function(err) {
-                showImage("AIが応答しません...");
-            });
+
+        var root_promise = new Promise((resolve, reject) => {
+            resolve();
+        });
+        for (let lucks_index = 0; lucks_index < 5; lucks_index++) {
+            let luck_value = Math.floor(Math.random() * 5) + 1;
+            //let api_url = 'http://localhost:5000/';
+            let api_url = 'https://fortunereading.azurewebsites.net/';
+            let url = api_url + 'todays_result?lucks=' + lucks_index + '&luck_value=' + luck_value;
+
+            debug = false;
+            if (debug == false) {
+                root_promise = root_promise.then(() => {
+                    return new Promise((resolve, reject) => {
+                        fetch(url, {"content" : ""})
+                        .then(function(response) {
+                            if (!response.ok) {
+                                showImage("AIが寝ぼけているようです...", lucks_index);
+                                resolve();
+                            }
+                            return response.json();
+                        })
+                        .then(function(promise) {
+                            showImage(promise.content, lucks_index, luck_value);
+                            resolve();
+                        })
+                        .catch(function(err) {
+                            showImage("AIが応答しません...", lucks_index);
+                            resolve();
+                        });
+                    });
+                });
+            }
+            else {
+                demo_text = [
+"恋愛運が低調な時期です。\n\
+愛情を深めるためには、相手とのコミュニケーションを大切にし、理解し合うことが重要です。\n\
+自分自身の気持ちにも耳を傾けることで、新たな可能性が開けるかもしれません。",
+
+"今あなたの仕事運は少し低調かもしれません。\n\
+焦らず、落ち着いて行動することが大切です。\n\
+何か新しいアプローチを試してみると良いかもしれません。\n",
+
+"金運は今ひとつですが、積極的な行動を起こすことで改善される可能性があります。\n\
+良い機会を逃さずに、自分にとって大切なことに投資してみてください。\n",
+
+"健康運が高めの時期です。\n\
+体調管理をしっかりとして、健康に配慮することが大切です。\n",
+
+"あなたには今、勉強に取り組む最高のタイミングが訪れています。\n\
+努力が報われ、確実に成果を出すことができるでしょう。\n\
+設定した目標を達成するために、集中力を高めて取り組んでください。\n\
+成功があなたのものとなります。\n"
+                ];
+                root_promise = root_promise.then(() => {
+                    return new Promise((resolve, reject) => {
+                        setTimeout(() => {
+                            showImage(demo_text[lucks_index], lucks_index, luck_value);
+                            resolve();
+                        }, 1000);
+                    });
+                });
+            }
+        }
     }
 
     // 今日のひとこと画像を表示させる
-    function showImage(content) {
+    function showImage(content, lucks_index, luck_value) {
 
         document.getElementById('loading_div').style.display = 'none';
         document.getElementById('div_bottom').style.display = 'none';
 
         div_center = document.getElementById('div_center');
         div_center.style.display = 'block';
-        div_center.innerHTML = content;
-        div_center.classList.add("active");
+
+        result = document.getElementById('result' + lucks_index);
+        result.style.display = 'block';
+        lucks = ["恋愛運", "仕事運", "金運", "健康運", "勉強運"];
+        content_txt = lucks[lucks_index] + ':' + '★'.repeat(luck_value) + '\n' + content;
+        result.innerHTML = content_txt;
     }
 
 </script>
